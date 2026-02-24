@@ -19,6 +19,7 @@ The system is built using serverless architecture, making it highly scalable, co
 
 # Architectural Diagram:
 
+![Image](https://github.com/user-attachments/assets/d5ff0d23-ada4-43da-9018-f5b25dd74831)
 
 # Project Steps (Working):
 # 1. Create frontend website
