@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Image Optimizer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    font-family: Arial, sans-serif;
+}
+
+.card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,.3);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #1e3c72;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #162f5b;
+}
+
+.results a {
+    display: block;
+    margin-top: 8px;
+    color: #1e3c72;
+    font-weight: bold;
+    text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>📤 Image Upload</h2><br>
+
+    <input type="file" id="fileInput" accept="image/*"><br><br>
+
+    <button onclick="uploadImage()">Upload Image</button>
+
+    <div id="results" class="results"></div>
+</div>
+
+<script>
+async function uploadImage() {
+    const file = document.getElementById("fileInput").files[0];
+
+    if (!file) {
+        alert("Select image first");
+        return;
+    }
+
+    document.getElementById("results").innerHTML = "Uploading & processing...";
+
+    try {
+        const res = await fetch(
+            "https://gz41ogyir9.execute-api.ap-south-1.amazonaws.com/resize",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/octet-stream"
+                },
+                body: file
+            }
+        );
+
+        const data = await res.json();
+
+        document.getElementById("results").innerHTML = `
+            <strong>Download Optimized Images:</strong>
+            <a href="${data.images['1080p']}" target="_blank">1080p</a>
+            <a href="${data.images['720p']}" target="_blank">720p</a>
+            <a href="${data.images['480p']}" target="_blank">480p</a>
+        `;
+
+    } catch (err) {
+        console.error(err);
+        document.getElementById("results").innerHTML = "Upload failed.";
+    }
+}
+</script>
+
+</body>
+</html>
