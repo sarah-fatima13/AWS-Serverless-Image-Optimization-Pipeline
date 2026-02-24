@@ -35,3 +35,82 @@ Input Bucket – Stores uploaded images
 
 Output Bucket – Stores resized and optimized images
 
+
+
+# 3. Enable Static Website Hosting
+
+Static website hosting was enabled on the frontend S3 bucket. This allows the frontendimage.html file to be accessed publicly via browser without any backend servers.
+
+Image
+
+# 4. Create Lambda Execution Role (IAM)
+
+An IAM role was created for the Lambda function with permissions to access S3 and write logs to CloudWatch, following AWS security best practices.
+
+Image
+
+# 5. Create Lambda Function – imageresizefunction
+
+A Python-based AWS Lambda function named imageresizefunction was developed using the Pillow image processing library. 
+The function:
+-Receives image upload events
+-Resizes images into multiple resolutions (1080p, 720p, 480p)
+-Compresses images for optimized storage
+-Stores processed images in the output S3 bucket
+
+Image
+
+# 6. Add Pillow Library Using Lambda Layers
+
+Since AWS Lambda does not include Pillow by default, a Lambda Layer was created and attached to imageresizefunction, enabling advanced image processing.
+
+Image
+
+# 7. Configure S3 Event Trigger
+
+The input S3 bucket was configured to trigger imageresizefunction automatically whenever a new image is uploaded, enabling fully event-driven processing.
+
+Image
+
+# 8. Setup API Gateway
+
+Amazon API Gateway was used to expose imageresizefunction as a HTTP API endpoint. This allows the frontend interface to securely invoke the backend processing service.
+
+Image
+
+# 9.  Updated Frontend Interface
+
+The frontend code (frontendimage.html) was modified to include the Amazon API Gateway invoke URL for backend integration. A simple HTML and CSS interface enables image uploads and displays download links for resized images returned by the backend.
+
+
+Image
+
+# 10. End-to-End Testing
+
+The complete pipeline was tested successfully. 
+Upon image upload:
+
+-The Lambda function was automatically triggered
+
+-Images were resized into multiple resolutions
+
+-Optimized images were stored in the output bucket
+
+-Users were able to download resized images
+
+AWS Services Used:
+
+-Amazon S3
+
+-AWS Lambda
+
+-Amazon API Gateway
+
+-AWS IAM
+
+-AWS CloudWatch
+
+# Note:
+
+All AWS resources used for this project were deleted after completion to avoid unintended charges, as the project was implemented using the AWS Free Tier.
+
